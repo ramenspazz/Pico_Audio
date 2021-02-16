@@ -1,0 +1,24 @@
+#pragma once
+
+/* Global defines for buffer.cpp*/
+// Defines Pins used for project
+#define PICO_AUDIO_I2S_DATA_PIN         9
+#define PICO_AUDIO_I2S_CLOCK_PIN_BASE   10
+#define PICO_AUDIO_I2S_LRCLOCK_PIN_BASE   12
+
+#define PI 3.1415926535897
+//begin imports
+#include "/home/kirisame_tempest/Programs/pico/pico-sdk/src/boards/include/boards/pico.h"
+#include "pico/stdlib.h"
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
+#include "hardware/structs/clocks.h"
+#include <math.h>
+#include <cmath>
+#include <vector>
+
+// Project stuff
+#include "project_head.hcc"
+
+// Our assembled program:
+#include "buffer.pio.h"

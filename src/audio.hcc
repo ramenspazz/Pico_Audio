@@ -1,0 +1,58 @@
+#include <list>
+
+namespace AUDIO_DEVICE{
+    /*! \brief A buffer structure used to store and send audio data
+    *  \ingroup audio.hcc
+    */
+    template<typename T>
+    struct buffer_device
+    {
+        uint8_t max_buffer_size;
+        std::list<T> buffer;
+        buffer_device<T>(const uint8_t _size){
+            max_buffer_size = _size;
+        }
+        
+        void buffer_device_push(T _data){
+            if(buffer.size() < max_buffer_size){
+                buffer.push_back(_data);
+            }
+        }
+
+        T buffer_device_data_pull(){
+            T Out = buffer.front();
+            buffer.pop_front();
+            return(Out);
+        }
+    };
+    
+    template<class T>
+    class audio_device
+    {
+    private:
+        buffer_device<T>* buffer;
+    public:
+        audio_device(const uint8_t _size){
+            buffer = new buffer_device<T>(_size);
+        }
+        ~audio_device();
+
+        /*! \brief Sends a word of data to the buffer
+        *  \ingroup audio.hcc
+        */
+        void buffer_data_push(T _data){
+        // This functions puts data into the buffer
+            // call pio function to push data with DMA to audio buffer
+            this->buffer->buffer_device_push(_data);
+        }
+
+        /*! \brief Sends a word of data from the buffer to the I2S data pin
+        *  \ingroup audio.hcc
+        */
+        void buffer_data_send_to_I2S_pin(const uint sm){
+        // This function 
+        // Selecting from LR 
+            pio_sm_put_blocking(pio0, sm, buffer->buffer_device_data_pull());
+        }
+    };
+}
